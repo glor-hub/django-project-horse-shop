@@ -1,0 +1,34 @@
+from django.db import models
+
+# Create your models here.
+# Create your models here.
+
+class Customer(models.Model):
+    first_name = models.CharField(max_length=32)
+    last_name = models.CharField(max_length=32)
+    phone = models.CharField(max_length=32, default='')
+    email = models.EmailField(max_length=64, default='')
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+
+class Order(models.Model):
+    CREATED = 'C'
+    ACTIVE = 'A'
+    FINISHED = 'F'
+    STATUS = [
+        (CREATED, 'Created'),
+        (ACTIVE, 'Active'),
+        (FINISHED, 'Finished')
+    ]
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
+    created_at = models.DateTimeField(auto_created=False, auto_now_add=True)
+    status = models.CharField(max_length=1, choices=STATUS, default='C')
+    comment = models.TextField(blank=True)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2,
+                                      default=0)  # total price for all products in order
+    total_count = models.PositiveIntegerField(default=1)  # total count of products in order
+
+    def __str__(self):
+        return f"order {self.pk} status {self.status}"

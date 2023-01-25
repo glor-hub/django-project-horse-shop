@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Order Create
+{% endblock %}
+{% block main_content %}
+
+    <div class="container mt-3 pt-2 border">
+        <div class="row">
+            <div class="col-sm-8 p-3">
+                {% if products_in_cart %}
+                    {% if user.is_anonymous %}
+                        <h3>Login To Account</h3>
+                        <h5><a href="{% url 'shopauth:login' %}">
+                            <button class="btn btn-success">Login</button>
+                        </a></h5>
+                        <h3>New At Magic Horse? Register Now!</h3>
+
+                        <h5><a href="{% url 'shopauth:register' %}">
+                        <button class="btn btn-success">Register</button>
+                    {% else %}
+                        <h3>Checkout</h3>
+                        <br>
+                        <form action="." method="post" class="order-form">
+                            {{ form.as_p }}
+                            <p><input type="submit" class="btn btn-success" value="Proceed order"></p>
+                            {% csrf_token %}
+                        </form>
+                    {% endif %}
+                {% else %}
+                <h5>Your Order is already proceeded.</h5>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
